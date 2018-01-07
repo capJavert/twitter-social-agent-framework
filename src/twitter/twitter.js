@@ -1,18 +1,16 @@
 const User = require('./user');
 
 class Twitter {
-    constructor(page, data, username, password) {
+    constructor(page, data) {
         this.page = page;
         this.data = data;
-        this.username = username;
-        this.password = password;
 
         this.page.on('dialog', async dialog => {
             await dialog.defaultValue()
         });
     }
 
-    async login() {
+    async login(username, password) {
         try {
             await this.page.goto(this.data.baseurl+"/login", {waitUntil: 'networkidle'});
 
@@ -20,14 +18,16 @@ class Twitter {
                 await this.page.waitForSelector('button.submit');
 
                 await this.page.focus(".js-username-field");
-                await this.page.type(this.username);
+                await this.page.type(username);
                 await this.page.focus('.js-password-field');
-                await this.page.type(this.password);
+                await this.page.type(password);
                 await this.page.click('button.submit');
 
                 console.log("Submit clicked");
 
                 await this.page.waitForSelector('.dashboard-left');
+
+                this.data.session = "SESSION_KEY";
 
                 console.log("Logged in");
             } else {
@@ -52,13 +52,18 @@ class Twitter {
     }
 
     async logout() {
+        if (this.data.session === null) {
+            console.log("Not logged in");
+
+            return false;
+        }
+
         try {
             await this.page.goto(this.data.baseurl+"/logout", {waitUntil: 'networkidle'});
 
             await this.page.waitForSelector('button.js-submit');
             await this.page.click("button.js-submit");
-
-            await this.page.waitForNavigation();
+            this.data.session = null;
 
             console.log("Logged out");
 

@@ -10,13 +10,34 @@ class User {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
 
-            if (this.page.$('.ProfileNav-list .user-actions.not-following').length) {
+            await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
+
+            if (await this.page.$('.ProfileNav-list .user-actions.not-following') !== null) {
                 await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
                 await this.page.click('.ProfileNav-list .user-actions .js-follow-btn');
-
-                await this.page.waitForNavigation();
             } else {
                 console.log("Already Following")
+            }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async unfollow(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+
+            await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
+
+            if (await this.page.$('.ProfileNav-list .user-actions.following') !== null) {
+                await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
+                await this.page.click('.ProfileNav-list .user-actions .js-follow-btn');
+            } else {
+                console.log("Not following")
             }
 
             return true;
@@ -31,6 +52,7 @@ class User {
         try {
             if (!Helpers.urlsEqual(this.page.url(), this.data.baseurl)) {
                 await this.page.goto(this.data.baseurl, {waitUntil: 'networkidle'});
+                await this.page.waitForSelector(".js-tweet-btn");
             }
 
             await this.page.waitForSelector("#tweet-box-home-timeline");
