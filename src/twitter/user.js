@@ -1,3 +1,4 @@
+const Helpers = require('../helpers/helpers');
 
 class User {
     constructor(page, data) {
@@ -17,6 +18,30 @@ class User {
             } else {
                 console.log("Already Following")
             }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async tweet(text) {
+        try {
+            if (!Helpers.urlsEqual(this.page.url(), this.data.baseurl)) {
+                await this.page.goto(this.data.baseurl, {waitUntil: 'networkidle'});
+            }
+
+            await this.page.waitForSelector("#tweet-box-home-timeline");
+            await this.page.click("#tweet-box-home-timeline");
+            await this.page.waitForSelector("#tweet-box-home-timeline.is-showPlaceholder");
+            await this.page.focus("#tweet-box-home-timeline");
+            await this.page.type(text);
+            await this.page.waitForSelector(".js-tweet-btn");
+            await this.page.click(".js-tweet-btn");
+
+            console.log("Tweeted: " + text);
 
             return true;
         } catch(e) {

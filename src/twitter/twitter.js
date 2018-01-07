@@ -8,7 +8,7 @@ class Twitter {
         this.password = password;
 
         this.page.on('dialog', async dialog => {
-            await dialog.dismiss();
+            await dialog.defaultValue()
         });
     }
 
@@ -59,6 +59,8 @@ class Twitter {
             await this.page.click("button.js-submit");
 
             await this.page.waitForNavigation();
+
+            console.log("Logged out");
 
             return true;
         } catch(e) {
