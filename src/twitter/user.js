@@ -1,4 +1,3 @@
-const $ = require("jquery");
 
 class User {
     constructor(page, data) {

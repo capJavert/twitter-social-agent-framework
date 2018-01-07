@@ -1,5 +1,4 @@
 const User = require('./user');
-const $ = require("jquery");
 
 class Twitter {
     constructor(page, data, username, password) {
