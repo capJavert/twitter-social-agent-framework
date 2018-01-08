@@ -72,6 +72,78 @@ class User {
             return false;
         }
     }
+
+    async likeRecentTweets(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+
+            await this.page.waitForSelector(".ProfileTweet-action--favorite");
+
+            for (let element of await this.page.$$(".ProfileTweet-actionButton.js-actionFavorite")) {
+                await element.click();
+            }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async likeLastTweet(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+
+            await this.page.waitForSelector(".ProfileTweet-action--favorite");
+
+            await (await this.page.$(".ProfileTweet-actionButton.js-actionFavorite")).click();
+
+            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async followNetwork(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle'});
+
+            await this.page.waitForSelector(".AppContent-main");
+
+            for (let element of await this.page.$$(".AppContent-main .js-follow-btn")) {
+                await element.click()
+            }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async followInterests(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle'});
+
+            await this.page.waitForSelector(".AppContent-main");
+
+            for (let element of await this.page.$$(".AppContent-main .js-follow-btn")) {
+                await element.click()
+            }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
 }
 
 module.exports = User;
