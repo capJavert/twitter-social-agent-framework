@@ -62,8 +62,6 @@ class User {
             await this.page.waitForSelector(".js-tweet-btn");
             await this.page.click(".js-tweet-btn");
 
-            console.log("Tweeted: " + text);
-
             return true;
         } catch(e) {
             console.log(e);
