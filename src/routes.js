@@ -70,6 +70,22 @@ const appRouter = function (app) {
             }
         });
 
+        app.get("/followers/:username", async function(request, response) {
+            if(!request.params.username) {
+                return response.send({"status": "error", "message": "missing a parameter: username"});
+            } else {
+                return response.send(await twitter.user().followers(request.params.username));
+            }
+        });
+
+        app.get("/interests/:username", async function(request, response) {
+            if(!request.params.username) {
+                return response.send({"status": "error", "message": "missing a parameter: username"});
+            } else {
+                return response.send(await twitter.user().interests(request.params.username));
+            }
+        });
+
         app.post("/login", async function (request, response) {
             if(!request.body.username || !request.body.password) {
                 return response.send({"status": "error", "message": "missing a parameters: username or password"});

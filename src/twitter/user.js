@@ -8,7 +8,7 @@ class User {
 
     async follow(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
 
@@ -29,7 +29,7 @@ class User {
 
     async unfollow(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector('.ProfileNav-list .user-actions .js-follow-btn');
 
@@ -51,15 +51,14 @@ class User {
     async tweet(text) {
         try {
             if (!Helpers.urlsEqual(this.page.url(), this.data.baseurl)) {
-                await this.page.goto(this.data.baseurl, {waitUntil: 'networkidle'});
+                await this.page.goto(this.data.baseurl, {waitUntil: 'networkidle2'});
                 await this.page.waitForSelector(".js-tweet-btn");
             }
 
             await this.page.waitForSelector("#tweet-box-home-timeline");
             await this.page.click("#tweet-box-home-timeline");
             await this.page.waitForSelector("#tweet-box-home-timeline.is-showPlaceholder");
-            await this.page.focus("#tweet-box-home-timeline");
-            await this.page.type(text);
+            await this.page.type("#tweet-box-home-timeline", text);
             await this.page.waitForSelector(".js-tweet-btn");
             await this.page.click(".js-tweet-btn");
 
@@ -75,7 +74,7 @@ class User {
 
     async likeRecentTweets(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector(".ProfileTweet-action--favorite");
 
@@ -93,13 +92,11 @@ class User {
 
     async likeLastTweet(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector(".ProfileTweet-action--favorite");
 
             await (await this.page.$(".ProfileTweet-actionButton.js-actionFavorite")).click();
-
-            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
 
             return true;
         } catch(e) {
@@ -111,7 +108,7 @@ class User {
 
     async followNetwork(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector(".AppContent-main");
 
@@ -129,7 +126,7 @@ class User {
 
     async followInterests(username) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector(".AppContent-main");
 
@@ -142,6 +139,52 @@ class User {
             console.log(e);
 
             return false;
+        }
+    }
+
+    async followers(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle2'});
+
+            await this.page.waitForSelector(".AppContent-main");
+
+            return await this.page.$$eval(".AppContent-main .username.u-dir .u-linkComplex-target", elements => {
+                let followers = [];
+
+                for (let element of elements) {
+                    followers.push(element.innerText);
+                }
+                followers.shift();
+
+                return followers;
+            });
+        } catch(e) {
+            console.log(e);
+
+            return [];
+        }
+    }
+
+    async interests(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle2'});
+
+            await this.page.waitForSelector(".AppContent-main");
+
+            return await this.page.$$eval(".AppContent-main .username.u-dir .u-linkComplex-target", elements => {
+                let followers = [];
+
+                for (let element of elements) {
+                    followers.push(element.innerText);
+                }
+                followers.shift();
+
+                return followers;
+            });
+        } catch(e) {
+            console.log(e);
+
+            return [];
         }
     }
 }

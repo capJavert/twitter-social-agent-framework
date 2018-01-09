@@ -6,21 +6,19 @@ class Twitter {
         this.data = data;
 
         this.page.on('dialog', async dialog => {
-            await dialog.defaultValue()
+            await dialog.accept();
         });
     }
 
     async login(username, password) {
         try {
-            await this.page.goto(this.data.baseurl+"/login", {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/login", {waitUntil: 'networkidle2'});
 
             if(this.data.session === null) {
                 await this.page.waitForSelector('button.submit');
 
-                await this.page.focus(".js-username-field");
-                await this.page.type(username);
-                await this.page.focus('.js-password-field');
-                await this.page.type(password);
+                await this.page.type(".js-username-field", username);
+                await this.page.type('.js-password-field', password);
                 await this.page.click('button.submit');
 
                 console.log("Submit clicked");
@@ -59,7 +57,7 @@ class Twitter {
         }
 
         try {
-            await this.page.goto(this.data.baseurl+"/logout", {waitUntil: 'networkidle'});
+            await this.page.goto(this.data.baseurl+"/logout", {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector('button.js-submit');
             await this.page.click("button.js-submit");
