@@ -3,7 +3,7 @@ const Twitter = require('./twitter/twitter');
 const DevicesProfiles = require('./devices.profiles');
 
 const appRouter = function (app) {
-    puppeteer.launch({headless: false, timeout: 0}).then(async browser => {
+    puppeteer.launch({headless: true, timeout: 0}).then(async browser => {
         const page = await browser.newPage();
         page.emulate(DevicesProfiles.desktop);
 
@@ -90,6 +90,22 @@ const appRouter = function (app) {
                 return response.send({"status": "error", "message": "missing a parameter: username"});
             } else {
                 return response.send(await twitter.user().interests(request.params.username));
+            }
+        });
+
+        app.post("/retweet/:username/status/:id", async function(request, response) {
+            if(!request.params.username || !request.params.id) {
+                return response.send({"status": "error", "message": "missing a parameters: username or status id"});
+            } else {
+                return response.send(await twitter.user().retweet(request.params.username, request.params.id));
+            }
+        });
+
+        app.post("/retweet-last/:username", async function(request, response) {
+            if(!request.params.username) {
+                return response.send({"status": "error", "message": "missing a parameter: username"});
+            } else {
+                return response.send(await twitter.user().retweetLastTweet(request.params.username));
             }
         });
 

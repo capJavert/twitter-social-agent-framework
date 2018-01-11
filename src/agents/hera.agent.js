@@ -24,10 +24,18 @@ TwitterAgent.prototype.onEvent = async function (parsedMessage) {
             await this.unfollow(parsedMessage.username);
             break;
         case "liked":
-            await this.like(parsedMessage.tweetId);
+            if (Math.random() > 0.6) {
+                await this.like(parsedMessage.username, parsedMessage.tweetId);
+            } else {
+                await this.retweet(parsedMessage.username, parsedMessage.tweetId);
+            }
             break;
         case "tweeted":
-            await this.likeLastTweet(parsedMessage.username);
+            if (Math.random() > 0.6) {
+                await this.likeLastTweet(parsedMessage.username);
+            } else {
+                await this.retweetLastTweet(parsedMessage.username);
+            }
     }
 
     Helpers.sleep(5000);

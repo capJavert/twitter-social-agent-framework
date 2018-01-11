@@ -78,9 +78,9 @@ TwitterAgent.prototype.followNetwork = async function (username) {
     }
 };
 
-TwitterAgent.prototype.like = async function (tweetId) {
+TwitterAgent.prototype.like = async function (username, tweetId) {
     if (this.twitter.data.session !== null) {
-        return await this.twitter.user().like(tweetId)
+        return await this.twitter.user().like(username, tweetId)
     } else {
         return false;
     }
@@ -125,6 +125,22 @@ TwitterAgent.prototype.logout = async function () {
     }
 
     return true;
+};
+
+TwitterAgent.prototype.retweet = async function (username, tweetId) {
+    if (this.twitter.data.session !== null) {
+        return await this.twitter.user().retweet(username, tweetId)
+    } else {
+        return false;
+    }
+};
+
+TwitterAgent.prototype.retweetLastTweet = async function (username) {
+    if (this.twitter.data.session !== null) {
+        return await this.twitter.user().retweetLastTweet(username)
+    } else {
+        return false;
+    }
 };
 
 module.exports = TwitterAgent;

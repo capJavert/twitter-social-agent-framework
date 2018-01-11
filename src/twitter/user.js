@@ -76,7 +76,11 @@ class User {
 
             await this.page.waitForSelector(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionFavorite");
 
-            await (await this.page.$(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionFavorite")).click();
+            try {
+                await (await this.page.$(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionFavorite")).click();
+            } catch (e) {
+                console.log("Already liked");
+            }
 
             return true;
         } catch(e) {
@@ -217,6 +221,50 @@ class User {
             console.log(e);
 
             return [];
+        }
+    }
+
+    async retweetLastTweet(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
+
+            await this.page.waitForSelector(".ProfileTweet-action--retweet");
+
+            try {
+                await (await this.page.$(".ProfileTweet-actionButton.js-actionRetweet")).click();
+                await (await this.page.$(".RetweetDialog-retweetActionLabel")).click();
+            } catch (e) {
+                console.log("Already retweeted");
+            }
+
+            return await this.page.$eval("div[data-tweet-id]", element => {
+                return element.getAttribute("data-tweet-id");
+            });
+        } catch(e) {
+            console.log(e);
+
+            return false;
+        }
+    }
+
+    async retweet(username, tweetId) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username+"/status/"+tweetId, {waitUntil: 'networkidle2'});
+
+            await this.page.waitForSelector(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionRetweet");
+
+            try {
+                await (await this.page.$(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionRetweet")).click();
+                await (await this.page.$(".RetweetDialog-retweetActionLabel")).click();
+            } catch (e) {
+                console.log("Already retweeted");
+            }
+
+            return true;
+        } catch(e) {
+            console.log(e);
+
+            return false;
         }
     }
 }
