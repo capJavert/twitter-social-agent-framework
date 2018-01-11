@@ -54,7 +54,6 @@ typings/
 # dotenv environment variables file
 .env
 .idea
-server.js
 index.js
 package-lock.json
 .DS_Store
