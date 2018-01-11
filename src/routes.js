@@ -1,14 +1,13 @@
 const puppeteer = require('puppeteer');
 const Twitter = require('./twitter/twitter');
-const UserData = require('../userdata');
 const DevicesProfiles = require('./devices.profiles');
 
 const appRouter = function (app) {
-    puppeteer.launch({headless: true, timeout: 0}).then(async browser => {
+    puppeteer.launch({headless: false, timeout: 0}).then(async browser => {
         const page = await browser.newPage();
         page.emulate(DevicesProfiles.desktop);
 
-        const twitter = await new Twitter(page, UserData.twitter);
+        const twitter = await new Twitter(page);
 
         app.get("/", function (req, res) {
             res.send("NodeJS Twitter API");
@@ -43,6 +42,14 @@ const appRouter = function (app) {
                 return response.send({"status": "error", "message": "missing a parameter: username"});
             } else {
                 return response.send(await twitter.user().likeRecentTweets(request.params.username));
+            }
+        });
+
+        app.post("/like-tweet/:username/status/:id", async function(request, response) {
+            if(!request.params.username || !request.params.id) {
+                return response.send({"status": "error", "message": "missing a parameters: username or status id"});
+            } else {
+                return response.send(await twitter.user().like(request.params.username, request.params.id));
             }
         });
 

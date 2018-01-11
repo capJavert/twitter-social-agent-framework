@@ -14,8 +14,24 @@ function TwitterAgent(username, password) {
 TwitterAgent.prototype = Object.create(eve.Agent.prototype);
 TwitterAgent.prototype.constructor = TwitterAgent;
 
+TwitterAgent.prototype.onEvent = async function (parsedMessage) {
+    // implement onEvent behaviour
+};
+
 TwitterAgent.prototype.receive = function (from, message) {
-    // handle incoming messages...
+    console.log(from, message);
+
+    try {
+        let parsedMessage = JSON.parse(message);
+
+        this.onEvent(parsedMessage)
+    } catch (e) {
+        console.log(from, message)
+    }
+};
+
+TwitterAgent.prototype.notify = async function (from, message) {
+    this.send(from, JSON.stringify(message));
 };
 
 TwitterAgent.prototype.login = async function () {
@@ -57,6 +73,14 @@ TwitterAgent.prototype.followInterests = async function (username) {
 TwitterAgent.prototype.followNetwork = async function (username) {
     if (this.twitter.data.session !== null) {
         return await this.twitter.user().followNetwork(username)
+    } else {
+        return false;
+    }
+};
+
+TwitterAgent.prototype.like = async function (tweetId) {
+    if (this.twitter.data.session !== null) {
+        return await this.twitter.user().like(tweetId)
     } else {
         return false;
     }

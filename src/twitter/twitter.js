@@ -1,9 +1,12 @@
 const User = require('./user');
 
 class Twitter {
-    constructor(page, data) {
+    constructor(page) {
         this.page = page;
-        this.data = data;
+        this.data = {
+            'baseurl': 'https://twitter.com',
+            'session': null
+        };
 
         this.page.on('dialog', async dialog => {
             await dialog.accept();

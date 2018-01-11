@@ -70,15 +70,13 @@ class User {
         }
     }
 
-    async likeRecentTweets(username) {
+    async like(username, tweetId) {
         try {
-            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
+            await this.page.goto(this.data.baseurl+"/"+username+"/status/"+tweetId, {waitUntil: 'networkidle2'});
 
-            await this.page.waitForSelector(".ProfileTweet-action--favorite");
+            await this.page.waitForSelector(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionFavorite");
 
-            for (let element of await this.page.$$(".ProfileTweet-actionButton.js-actionFavorite")) {
-                await element.click();
-            }
+            await (await this.page.$(".PermalinkOverlay-modal div.stream-item-footer .ProfileTweet-actionButton.js-actionFavorite")).click();
 
             return true;
         } catch(e) {
@@ -88,15 +86,51 @@ class User {
         }
     }
 
+    async likeRecentTweets(username) {
+        try {
+            await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
+
+            await this.page.waitForSelector(".ProfileTweet-action--favorite");
+
+            for (let element of await this.page.$$(".ProfileTweet-actionButton.js-actionFavorite")) {
+                try {
+                    await element.click();
+                } catch (e) {
+                    console.log("Already liked");
+                }
+            }
+
+            return await this.page.$$eval("div[data-tweet-id]", elements => {
+                let tweetIds = [];
+
+                for (let element of elements) {
+                    tweetIds.push(element.getAttribute("data-tweet-id"));
+                }
+
+                return tweetIds;
+            });
+        } catch(e) {
+            console.log(e);
+
+            return [];
+        }
+    }
+
     async likeLastTweet(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
 
             await this.page.waitForSelector(".ProfileTweet-action--favorite");
 
-            await (await this.page.$(".ProfileTweet-actionButton.js-actionFavorite")).click();
+            try {
+                await (await this.page.$(".ProfileTweet-actionButton.js-actionFavorite")).click();
+            } catch (e) {
+                console.log("Already liked");
+            }
 
-            return true;
+            return await this.page.$eval("div[data-tweet-id]", element => {
+                return element.getAttribute("data-tweet-id");
+            });
         } catch(e) {
             console.log(e);
 
