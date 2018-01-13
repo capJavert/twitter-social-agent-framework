@@ -20,7 +20,7 @@ Hera.prototype.constructor = Hera;
  *
  * @returns {Promise.<void>}
  */
-TwitterAgent.prototype.onEvent = async function (parsedMessage) {
+Hera.prototype.onEvent = async function (parsedMessage) {
     if (this.twitter.data.session === null) {
         await this.login();
     }
@@ -48,9 +48,10 @@ TwitterAgent.prototype.onEvent = async function (parsedMessage) {
             } else {
                 await this.retweetLastTweet(parsedMessage.username);
             }
+            break;
+        case "retweeted":
+            await this.unfollow(parsedMessage.username)
     }
-
-    Helpers.sleep(5000);
 };
 
 module.exports = Hera;

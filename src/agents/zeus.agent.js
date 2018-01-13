@@ -26,6 +26,8 @@ Zeus.prototype.runBehavior = async function () {
     await this.notify("foi_hera", {"event": "hello", "username": this.username});
 
     for (let interest of await this.interests()) {
+        await this.followInterests(interest);
+
         if (Math.random() > 0.7) {
             await this.unfollow(interest);
 
@@ -50,6 +52,26 @@ Zeus.prototype.runBehavior = async function () {
 
             try {
                 await this.notify("foi_hera", {"event": "tweeted", "username": this.username});
+            } catch (e) {
+                console.log("Agent not found");
+            }
+        }
+
+        if (Math.random() > 0.5) {
+            let tweetId = await this.retweetLastTweet(interest);
+
+            try {
+                await this.notify("foi_hera", {"event": "retweeted", "username": interest, "tweetId": tweetId});
+            } catch (e) {
+                console.log("Agent not found");
+            }
+        }
+
+        if (Math.random() > 0.8) {
+            let tweetId = await this.likeLastTweet(interest);
+
+            try {
+                await this.notify("foi_hera", {"event": "liked", "username": interest, "tweetId": tweetId});
             } catch (e) {
                 console.log("Agent not found");
             }
