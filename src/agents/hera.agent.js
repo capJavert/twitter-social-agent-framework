@@ -1,6 +1,13 @@
 const TwitterAgent = require('./twitter.agent');
 const Helpers = require('../helpers/helpers');
 
+/**
+ * Hera agent, concrete implementation of TwitterAgent
+ *
+ * @param username
+ * @param password
+ * @constructor
+ */
 function Hera(username, password) {
     TwitterAgent.call(this, username, password);
 }
@@ -8,6 +15,11 @@ function Hera(username, password) {
 Hera.prototype = Object.create(TwitterAgent.prototype);
 Hera.prototype.constructor = Hera;
 
+/**
+ * Response behavior for Hera agent
+ *
+ * @returns {Promise.<void>}
+ */
 TwitterAgent.prototype.onEvent = async function (parsedMessage) {
     if (this.twitter.data.session === null) {
         await this.login();

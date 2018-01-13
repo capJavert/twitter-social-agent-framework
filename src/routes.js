@@ -2,6 +2,11 @@ const puppeteer = require('puppeteer');
 const Twitter = require('./twitter/twitter');
 const DevicesProfiles = require('./devices.profiles');
 
+/**
+ * Run web app for Twitter API
+ *
+ * @param app
+ */
 const appRouter = function (app) {
     puppeteer.launch({headless: true, timeout: 0}).then(async browser => {
         const page = await browser.newPage();

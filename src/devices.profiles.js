@@ -1,3 +1,9 @@
+/**
+ * Defines user agent for browser instances
+ *
+ * @type {{desktop: {name: string, userAgent: string, viewport: {width: number, height: number}}}}
+ */
+
 module.exports = {
     desktop: {
         'name': 'Desktop',

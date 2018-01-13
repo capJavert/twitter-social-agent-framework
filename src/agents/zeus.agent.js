@@ -1,6 +1,13 @@
 const TwitterAgent = require('./twitter.agent');
 const Helpers = require('../helpers/helpers');
 
+/**
+ * Zeus agent, concrete implementation of TwitterAgent
+ *
+ * @param username
+ * @param password
+ * @constructor
+ */
 function Zeus(username, password) {
     TwitterAgent.call(this, username, password);
 }
@@ -8,6 +15,11 @@ function Zeus(username, password) {
 Zeus.prototype = Object.create(TwitterAgent.prototype);
 Zeus.prototype.constructor = Zeus;
 
+/**
+ * Behavior for Zeus agent
+ *
+ * @returns {Promise.<void>}
+ */
 Zeus.prototype.runBehavior = async function () {
     await this.login();
 

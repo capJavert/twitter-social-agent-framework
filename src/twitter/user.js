@@ -6,6 +6,12 @@ class User {
         this.data = data;
     }
 
+    /**
+     * Follow method
+     *
+     * @param username
+     * @returns {Promise.<boolean>}
+     */
     async follow(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
@@ -27,6 +33,12 @@ class User {
         }
     }
 
+    /**
+     * Unfollow method
+     *
+     * @param username
+     * @returns {Promise.<boolean>}
+     */
     async unfollow(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
@@ -48,6 +60,12 @@ class User {
         }
     }
 
+    /**
+     * Tweet method
+     *
+     * @param text
+     * @returns {Promise.<boolean>}
+     */
     async tweet(text) {
         try {
             if (!Helpers.urlsEqual(this.page.url(), this.data.baseurl)) {
@@ -70,6 +88,13 @@ class User {
         }
     }
 
+    /**
+     * Like method
+     *
+     * @param username
+     * @param tweetId
+     * @returns {Promise.<boolean>}
+     */
     async like(username, tweetId) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/status/"+tweetId, {waitUntil: 'networkidle2'});
@@ -90,6 +115,12 @@ class User {
         }
     }
 
+    /**
+     * Like recent tweets method
+     *
+     * @param username
+     * @returns {Promise.<*>}
+     */
     async likeRecentTweets(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
@@ -120,6 +151,11 @@ class User {
         }
     }
 
+    /**
+     * Like last tweet method
+     * @param username
+     * @returns {Promise.<*>}
+     */
     async likeLastTweet(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
@@ -142,6 +178,12 @@ class User {
         }
     }
 
+    /**
+     * Follow network method
+     *
+     * @param username
+     * @returns {Promise.<boolean>}
+     */
     async followNetwork(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle2'});
@@ -160,6 +202,12 @@ class User {
         }
     }
 
+    /**
+     * Follow interests method
+     *
+     * @param username
+     * @returns {Promise.<boolean>}
+     */
     async followInterests(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle2'});
@@ -178,6 +226,12 @@ class User {
         }
     }
 
+    /**
+     * Get followers method
+     *
+     * @param username
+     * @returns {Promise.<*>}
+     */
     async followers(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/followers", {waitUntil: 'networkidle2'});
@@ -201,6 +255,12 @@ class User {
         }
     }
 
+    /**
+     * Get interests method
+     *
+     * @param username
+     * @returns {Promise.<*>}
+     */
     async interests(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/following", {waitUntil: 'networkidle2'});
@@ -224,6 +284,12 @@ class User {
         }
     }
 
+    /**
+     * Retweet last tweet method
+     *
+     * @param username
+     * @returns {Promise.<*>}
+     */
     async retweetLastTweet(username) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username, {waitUntil: 'networkidle2'});
@@ -247,6 +313,12 @@ class User {
         }
     }
 
+    /**
+     * Retweet method
+     * @param username
+     * @param tweetId
+     * @returns {Promise.<boolean>}
+     */
     async retweet(username, tweetId) {
         try {
             await this.page.goto(this.data.baseurl+"/"+username+"/status/"+tweetId, {waitUntil: 'networkidle2'});

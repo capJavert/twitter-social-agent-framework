@@ -1,6 +1,10 @@
 const User = require('./user');
 
 class Twitter {
+    /**
+     * Init page and data from puppeteer Page
+     * @param page
+     */
     constructor(page) {
         this.page = page;
         this.data = {
@@ -13,6 +17,13 @@ class Twitter {
         });
     }
 
+    /**
+     * Login method
+     *
+     * @param username
+     * @param password
+     * @returns {Promise.<boolean>}
+     */
     async login(username, password) {
         try {
             await this.page.goto(this.data.baseurl+"/login", {waitUntil: 'networkidle2'});
@@ -52,6 +63,11 @@ class Twitter {
 
     }
 
+    /**
+     * Logout method
+     *
+     * @returns {Promise.<boolean>}
+     */
     async logout() {
         if (this.data.session === null) {
             console.log("Not logged in");
@@ -76,6 +92,11 @@ class Twitter {
         }
     }
 
+    /**
+     * Return user's methods
+     *
+     * @returns {User}
+     */
     user() {
         return new User(this.page, this.data);
     }
