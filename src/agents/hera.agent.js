@@ -27,7 +27,7 @@ TwitterAgent.prototype.onEvent = async function (parsedMessage) {
 
     switch (parsedMessage.event) {
         case "hello":
-            console.log(await this.follow(parsedMessage.username));
+            await this.follow(parsedMessage.username);
             break;
         case "followed":
             await this.likeLastTweet(parsedMessage.username);
