@@ -47,7 +47,7 @@ Zeus.prototype.runBehavior = async function () {
             }
         }
 
-        if (Math.random() > 0.95) {
+        if (Math.random() > 0.5) {
             await this.tweet(await Helpers.getQuote());
 
             try {

@@ -4,7 +4,7 @@ const DevicesProfiles = require('./src/devices.profiles');
 const Zeus = require('./src/agents/zeus.agent');
 const Hera = require('./src/agents/hera.agent');
 
-const headless = true;
+const headless = true; // set to false for visual mode
 
 (async () => {
     await puppeteer.launch({headless: headless, timeout: 0}).then(async browser => {
@@ -14,8 +14,6 @@ const headless = true;
         let page = await browser.newPage(); await page.emulate(DevicesProfiles.desktop);
 
         hera.twitter = await new Twitter(page);
-
-        await hera.login();
     });
 
     await puppeteer.launch({headless: headless, timeout: 0}).then(async browser => {
@@ -25,6 +23,6 @@ const headless = true;
         let page = await browser.newPage(); await page.emulate(DevicesProfiles.desktop);
         zeus.twitter = await new Twitter(page);
 
-        await zeus.login();
+        await zeus.runBehavior();
     });
 })();
