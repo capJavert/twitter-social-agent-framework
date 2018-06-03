@@ -11,7 +11,7 @@ To run this demo, you will need:
 ```
 $ git clone https://github.com/capJavert/twitter-social-agent-framework.git
 $ cd twitter-social-agent-framework
-$ pip install
+$ npm install
 ```
 
 ### Running API server
